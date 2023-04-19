@@ -454,8 +454,22 @@ const getLinearElementRotatedBounds = (
   return coords;
 };
 
-// We could cache this stuff
+// just a hack, not sure whether this is the best way to do it
+let cache: Map<ExcalidrawElement, [number, number, number, number]> = new Map();
 export const getElementBounds = (
+  element: ExcalidrawElement,
+): [number, number, number, number] => {
+
+  if(cache.has(element)){
+    return cache.get(element)!;
+  }
+
+  let res = calculateElementBounds(element);
+  cache.set(element, res);
+  return res;
+}
+
+export const calculateElementBounds = (
   element: ExcalidrawElement,
 ): [number, number, number, number] => {
   let bounds: [number, number, number, number];
